@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@types/node": "^11.10.5",
+    "requester": "^0.1.22",
     "typescript": "^3.3.3333"
   }
 }
