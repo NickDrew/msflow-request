@@ -4,8 +4,8 @@
   "description": "node.js module for accessing microsoft flow's http request trigger",
   "main": "index.js",
   "scripts": {
-    "test": "mocha dist/**/*.spec.js",
-    "lint": "eslint src/**/**.ts",
+    "test": "mocha dist/**/*.spec.js -r esm",
+    "lint": "eslint src/**/**.ts --max-warnings=0",
     "build": "tsc",
     "check": "npm run build && npm run lint && npm run test"
   },
@@ -28,6 +28,7 @@
     "@commitlint/travis-cli": "^7.5.2",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
+    "@typescript-eslint/eslint-plugin": "^1.4.2",
     "@typescript-eslint/parser": "^1.4.2",
     "chai": "^4.2.0",
     "eslint": "^5.15.1",
@@ -36,6 +37,7 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "esm": "^3.2.11",
     "mocha": "^6.0.2"
   },
   "dependencies": {
