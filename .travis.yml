@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - "lts/*"
+
+
+install:
+  - npm install -g eslint
+  - npm install
+
+script:
+  - commitlint-travis
+  - npm run lint
+  - npm test

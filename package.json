@@ -1,0 +1,45 @@
+{
+  "name": "msflow-request",
+  "version": "1.0.0",
+  "description": "node.js module for accessing microsoft flow's http request trigger",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha dist/**/*.spec.js",
+    "lint": "eslint src/**/**.ts",
+    "build": "tsc",
+    "check": "npm run build && npm run lint && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NickDrew/msflow-request.git"
+  },
+  "keywords": [
+    "node",
+    "flow",
+    "request"
+  ],
+  "author": "Nicholas Drew",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NickDrew/msflow-request/issues"
+  },
+  "homepage": "https://github.com/NickDrew/msflow-request#readme",
+  "devDependencies": {
+    "@commitlint/travis-cli": "^7.5.2",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "@typescript-eslint/parser": "^1.4.2",
+    "chai": "^4.2.0",
+    "eslint": "^5.15.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "mocha": "^6.0.2"
+  },
+  "dependencies": {
+    "@types/node": "^11.10.5",
+    "typescript": "^3.3.3333"
+  }
+}
