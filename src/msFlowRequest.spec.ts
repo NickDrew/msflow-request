@@ -1,4 +1,5 @@
 import {expect} from "chai"
+import nock from "../node_modules/nock/index"
 import MSFlowRequest from "./msFlowRequest"
 
 describe("Testing MSFlowRequest",()=>{
@@ -28,4 +29,20 @@ describe("Testing MSFlowRequest",()=>{
         expect(typeof testRequest.triggerFlow == "function").to.be.true
         done()
     })
+
+    it("Should get as expected", async ()=>{
+        const testAddress = "http://www.test.com"
+        const replyBody  = "path matched"
+        const replyCode = 200
+        const mockserv = nock(testAddress)
+            .get("/")
+            .reply(replyCode, replyBody);
+
+        const testRequest = new MSFlowRequest({triggerURL:testAddress,triggerType:"get", authToken:"TestToken",triggerData:{test: "data"}});
+        const data = await testRequest.triggerFlow()
+        expect(data.status).to.deep.equal(replyCode)
+        expect(data.body).to.deep.equal(replyBody)
+        expect(data.error).to.deep.equal(null)
+    })
+
 })

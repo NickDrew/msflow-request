@@ -1,3 +1,4 @@
+import request from "../node_modules/request/index";
 export default class MSFlowRequest {
     constructor(options) {
         this._triggerURL = options.triggerURL;
@@ -6,6 +7,11 @@ export default class MSFlowRequest {
         this._triggerData = options.triggerData;
     }
     async triggerFlow() {
+        return new Promise((resolve) => {
+            request(this._triggerURL, function (error, response, body) {
+                resolve({ error: error, status: response.statusCode, body: body });
+            });
+        });
     }
 }
 //# sourceMappingURL=msFlowRequest.js.map
