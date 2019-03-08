@@ -20,4 +20,9 @@ export default class MSFlowRequest{
         this._authToken = options.authToken
         this._triggerData = options.triggerData
     }
+
+    public async triggerFlow(): Promise<void>
+    {
+
+    }
 }
