@@ -12,13 +12,18 @@ describe("Testing MSFlowRequest", () => {
         done();
     });
     it("Should instantiate an object when passed required options and trigger data to its constructor", (done) => {
-        const testRequest = new MSFlowRequest({ triggerURL: "TestURL", triggerType: "TestType", triggerData: "TestData" });
+        const testRequest = new MSFlowRequest({ triggerURL: "TestURL", triggerType: "TestType", triggerData: { test: "data" } });
         expect(testRequest).to.be.a("Object");
         done();
     });
     it("Should instantiate an object when passed all options to its constructor", (done) => {
-        const testRequest = new MSFlowRequest({ triggerURL: "TestURL", triggerType: "TestType", authToken: "TestToken", triggerData: "TestData", });
+        const testRequest = new MSFlowRequest({ triggerURL: "TestURL", triggerType: "TestType", authToken: "TestToken", triggerData: { test: "data" } });
         expect(testRequest).to.be.a("Object");
+        done();
+    });
+    it("Should expose a public triggerFlow function", (done) => {
+        const testRequest = new MSFlowRequest({ triggerURL: "TestURL", triggerType: "TestType", authToken: "TestToken", triggerData: { test: "data" } });
+        expect(typeof testRequest.triggerFlow == "function").to.be.true;
         done();
     });
 });
