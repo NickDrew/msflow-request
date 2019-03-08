@@ -34,7 +34,7 @@ describe("Testing MSFlowRequest",()=>{
         const testAddress = "http://www.test.com"
         const replyBody  = "path matched"
         const replyCode = 200
-        const mockserv = nock(testAddress)
+        nock(testAddress)
             .get("/")
             .reply(replyCode, replyBody);
 
