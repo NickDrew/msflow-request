@@ -7,7 +7,8 @@
     "test": "mocha dist/**/*.spec.js -r esm",
     "lint": "eslint src/**/**.ts --max-warnings=0",
     "build": "tsc",
-    "check": "npm run build && npm run lint && npm run test"
+    "check": "npm run build && npm run lint && npm run test",
+    "start": "tsc && node dist/index"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "@commitlint/travis-cli": "^7.5.2",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
+    "@types/nock": "^9.3.1",
     "@typescript-eslint/eslint-plugin": "^1.4.2",
     "@typescript-eslint/parser": "^1.4.2",
     "chai": "^4.2.0",
@@ -43,6 +45,7 @@
   },
   "dependencies": {
     "@types/node": "^11.10.5",
+    "@types/request": "^2.48.1",
     "request": "^2.88.0",
     "typescript": "^3.3.3333"
   }

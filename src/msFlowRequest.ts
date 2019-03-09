@@ -1,15 +1,15 @@
 
-import request from "../node_modules/request/index"
+import * as request from "request"
 
 
-interface MSFlowOptions{
+export interface MSFlowOptions{
     triggerURL: string;
     triggerType: string;
     authToken?: string;
     triggerData?: object;
 }
 
-interface MSFlowReturn{
+export interface MSFlowReturn{
     error: string;
     status: number;
     body: string;
@@ -30,8 +30,15 @@ export default class MSFlowRequest{
 
     public async triggerFlow(): Promise<MSFlowReturn>
     {
+
+        var options = {
+            method: this._triggerType,
+            body: this._triggerData,
+            json: true,
+            url: this._triggerURL
+        }
         return new Promise<MSFlowReturn>((resolve)=>{
-            request(this._triggerURL, function (error, response, body) {
+            request(options, function (error, response, body) {
                 resolve({error:error,status:response.statusCode,body:body})
             });
         })

@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "module": "es2015",
+    "module": "commonjs",
     "outDir": "dist",
     "sourceMap": true,
-    "types":["node","mocha","chai"]
   },
   "include": [
     "src/**/*.ts"

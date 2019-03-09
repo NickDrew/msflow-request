@@ -1,6 +1,7 @@
 import {expect} from "chai"
-import nock from "../node_modules/nock/index"
 import MSFlowRequest from "./msFlowRequest"
+import * as nock from "nock"
+
 
 describe("Testing MSFlowRequest",()=>{
     it("Should instantiate an object when passed required options to its constructor",(done)=>{
@@ -34,6 +35,7 @@ describe("Testing MSFlowRequest",()=>{
         const testAddress = "http://www.test.com"
         const replyBody  = "path matched"
         const replyCode = 200
+
         nock(testAddress)
             .get("/")
             .reply(replyCode, replyBody);
