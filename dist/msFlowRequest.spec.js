@@ -327,7 +327,6 @@ describe("Testing MSFlowRequest", () => {
             errorResponse = error;
         }
         chai_1.expect(errorResponse).to.deep.equal(errorResponseNotFoundReturn);
-        console.log(errorResponse);
     });
 });
 //# sourceMappingURL=msFlowRequest.spec.js.map

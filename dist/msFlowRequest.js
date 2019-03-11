@@ -17,7 +17,7 @@ class FlowOptions {
 exports.FlowOptions = FlowOptions;
 class FlowTrigger {
     constructor(options) {
-        //toDo: Validate incoming data
+        //TODO: Validate incoming data
         this._triggerURL = options.triggerURL;
         this._triggerType = options.triggerType;
         if (options.data)
@@ -32,8 +32,10 @@ class FlowTrigger {
             timeout: 1000
         };
         return new Promise((resolve, reject) => {
+            //TODO: refactor some of the below into sub-functions
             request(options, function (error, response, body) {
-                if (error) {
+                if (error) //We assume some sort of network error preventing the payload reaching the flow trigger
+                 {
                     const errorResponse = new FlowError();
                     if (error.code) {
                         errorResponse.statusCode = error.code,
@@ -47,7 +49,7 @@ class FlowTrigger {
                     }
                     reject(errorResponse);
                 }
-                else if (body && body["error"]) //Flow enpoint recieved the paylod, but it was invalid
+                else if (body && body["error"]) //We assume the flow trigger recieved the payload, but it was invalid
                  {
                     const errorResponse = new FlowError();
                     errorResponse.statusCode = (response.statusCode) ? response.statusCode.toString() : "Unknown";
@@ -55,7 +57,8 @@ class FlowTrigger {
                     errorResponse.message = (body["message"]) ? body["message"] : "Unknown";
                     reject(errorResponse);
                 }
-                else {
+                else //We assume the flow succeeded
+                 {
                     const success = new FlowSuccess();
                     success.requestID = response.headers["x-ms-request-id"];
                     success.requestDateTime = response.headers["date"];

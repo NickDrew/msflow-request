@@ -30,6 +30,8 @@
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
     "@types/nock": "^9.3.1",
+    "@types/node": "^11.11.0",
+    "@types/request": "^2.48.1",
     "@typescript-eslint/eslint-plugin": "^1.4.2",
     "@typescript-eslint/parser": "^1.4.2",
     "chai": "^4.2.0",
@@ -41,12 +43,10 @@
     "eslint-plugin-standard": "^4.0.0",
     "esm": "^3.2.11",
     "mocha": "^6.0.2",
-    "nock": "^10.0.6"
+    "nock": "^10.0.6",
+    "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "@types/node": "^11.10.5",
-    "@types/request": "^2.48.1",
-    "request": "^2.88.0",
-    "typescript": "^3.3.3333"
+    "request": "^2.88.0"
   }
 }

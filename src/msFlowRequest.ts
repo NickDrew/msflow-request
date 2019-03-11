@@ -81,7 +81,7 @@ export class FlowTrigger{
     private _triggerData: object
 
     public constructor(options: MSFlowRequestOptions){
-        //toDo: Validate incoming data
+        //TODO: Validate incoming data
         this._triggerURL= options.triggerURL
         this._triggerType = options.triggerType
         if(options.data) this._triggerData = options.data
@@ -98,36 +98,33 @@ export class FlowTrigger{
             timeout: 1000
         }
         return new Promise<MSFlowSuccessResponse>((resolve,reject)=>{
+            //TODO: refactor some of the below into sub-functions
             request(options, function (error, response, body) {
-                if(error)
+                if(error)//We assume some sort of network error preventing the payload reaching the flow trigger
                 {
                     const errorResponse = new FlowError()
                     if(error.code)
                     {
-
                         errorResponse.statusCode = error.code,
                         errorResponse.error=error.code,
                         errorResponse.message=`A network error of type ${error.code} has occured.`
-
                     }
                     else{
                         errorResponse.statusCode = "Unknown",
                         errorResponse.error="Unknown",
                         errorResponse.message=error.toString()
                     }
-
                     reject(errorResponse)
                 }
-                else if(body && body["error"])//Flow enpoint recieved the paylod, but it was invalid
+                else if(body && body["error"]) //We assume the flow trigger recieved the payload, but it was invalid
                 {
                     const errorResponse = new FlowError()
                     errorResponse.statusCode =(response.statusCode)? response.statusCode.toString() : "Unknown"
                     errorResponse.error = body["error"]
                     errorResponse.message = (body["message"])? body["message"]: "Unknown"
-
                     reject(errorResponse)
                 }
-                else
+                else //We assume the flow succeeded
                 {
                     const success = new FlowSuccess()
                     success.requestID = response.headers["x-ms-request-id"] as string
