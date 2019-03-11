@@ -34,6 +34,7 @@ export interface MSFlowRequestOptions{
     triggerType: string;
     data?: object;
     proxy?: string;
+    timeout?: number;
 }
 
 export class FlowSuccess implements MSFlowSuccessResponse{
@@ -70,18 +71,22 @@ export class FlowOptions implements MSFlowRequestOptions{
     public triggerType: string
     public data?: object
     public proxy?: string
+    public timeout?: number
 }
 export class FlowTrigger{
     private _triggerURL: string
     private _triggerType: string
     private _triggerData: object
-    private _proxy: number
+    private _proxy: string
+    private _timeout: number
 
     public constructor(options: MSFlowRequestOptions){
         //TODO: Validate incoming data
         this._triggerURL= options.triggerURL
         this._triggerType = options.triggerType
         if(options.data) this._triggerData = options.data
+        if(options.proxy) this._proxy=options.proxy
+        this._timeout = (options.timeout)? options.timeout:2000
     }
 
     public async trigger(): Promise<MSFlowSuccessResponse>
@@ -92,9 +97,10 @@ export class FlowTrigger{
             body: this._triggerData,
             json: true,
             url: this._triggerURL,
-            timeout: 1000,
+            timeout: this._timeout,
             proxy: this._proxy
         }
+
         return new Promise<MSFlowSuccessResponse>((resolve,reject)=>{
             //TODO: refactor some of the below into sub-functions
             request(options, function (error, response, body) {

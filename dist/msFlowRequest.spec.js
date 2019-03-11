@@ -98,6 +98,11 @@ const errorResponseNotFoundReturn = {
     error: "ENOTFOUND",
     message: "A network error of type ENOTFOUND has occured."
 };
+const errorTimeoutReturn = {
+    statusCode: "ESOCKETTIMEDOUT",
+    error: "ESOCKETTIMEDOUT",
+    message: "A network error of type ESOCKETTIMEDOUT has occured."
+};
 describe("Testing MSFlowRequest", () => {
     it("Expect a get operation to return valid data", async () => {
         nock("http://localTest.com")
@@ -329,13 +334,28 @@ describe("Testing MSFlowRequest", () => {
         }
         chai_1.expect(errorResponse).to.deep.equal(errorResponseNotFoundReturn);
     });
+    it("Expect timeout to result in an error", async () => {
+        nock("http://localTest.com")
+            .defaultReplyHeaders(errorResponseHead)
+            .get("/").delayConnection(600).reply(200);
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "get", timeout: 500 };
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
+        let errorResponse = undefined;
+        try {
+            await flowTrigger.trigger();
+        }
+        catch (error) {
+            errorResponse = error;
+        }
+        chai_1.expect(errorResponse).to.deep.equal(errorTimeoutReturn);
+    });
     it("Expect flow to be called from behind a proxy", async () => {
         const nockerProx = nockProxy(8001);
         nock("http://localTest.com")
             .defaultReplyHeaders(validPostyResponseHead)
             .patch("/")
             .reply(200);
-        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "patch", proxy: "http://localhost:8002" };
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "patch", proxy: "http://localhost:8001" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         const flowResponse = await flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);

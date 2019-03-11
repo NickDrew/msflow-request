@@ -17,6 +17,9 @@ class FlowTrigger {
         this._triggerType = options.triggerType;
         if (options.data)
             this._triggerData = options.data;
+        if (options.proxy)
+            this._proxy = options.proxy;
+        this._timeout = (options.timeout) ? options.timeout : 2000;
     }
     async trigger() {
         var options = {
@@ -24,7 +27,7 @@ class FlowTrigger {
             body: this._triggerData,
             json: true,
             url: this._triggerURL,
-            timeout: 1000,
+            timeout: this._timeout,
             proxy: this._proxy
         };
         return new Promise((resolve, reject) => {
