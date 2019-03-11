@@ -33,6 +33,7 @@ export interface MSFlowRequestOptions{
     triggerURL: string;
     triggerType: string;
     data?: object;
+    proxy?: string;
 }
 
 export class FlowSuccess implements MSFlowSuccessResponse{
@@ -65,20 +66,16 @@ export class FlowError implements MSFlowErrorResponse{
     public message: string
 }
 export class FlowOptions implements MSFlowRequestOptions{
-    public constructor(triggerURL: string, triggerType: string, data?: object)
-    {
-        this.triggerURL = triggerURL
-        this.triggerType = triggerType
-        this.data = data
-    }
     public triggerURL: string
     public triggerType: string
     public data?: object
+    public proxy?: string
 }
 export class FlowTrigger{
     private _triggerURL: string
     private _triggerType: string
     private _triggerData: object
+    private _proxy: number
 
     public constructor(options: MSFlowRequestOptions){
         //TODO: Validate incoming data
@@ -95,12 +92,13 @@ export class FlowTrigger{
             body: this._triggerData,
             json: true,
             url: this._triggerURL,
-            timeout: 1000
+            timeout: 1000,
+            proxy: this._proxy
         }
         return new Promise<MSFlowSuccessResponse>((resolve,reject)=>{
             //TODO: refactor some of the below into sub-functions
             request(options, function (error, response, body) {
-                if(error)//We assume some sort of network error preventing the payload reaching the flow trigger
+                if(error)//We assume some sort of network error preventing the trigger payload reaching the flow
                 {
                     const errorResponse = new FlowError()
                     if(error.code)
@@ -116,7 +114,7 @@ export class FlowTrigger{
                     }
                     reject(errorResponse)
                 }
-                else if(body && body["error"]) //We assume the flow trigger recieved the payload, but it was invalid
+                else if(body && body["error"]) //We assume the flow recieved the trigger payload, but rejected it
                 {
                     const errorResponse = new FlowError()
                     errorResponse.statusCode =(response.statusCode)? response.statusCode.toString() : "Unknown"
@@ -124,7 +122,7 @@ export class FlowTrigger{
                     errorResponse.message = (body["message"])? body["message"]: "Unknown"
                     reject(errorResponse)
                 }
-                else //We assume the flow succeeded
+                else //We assume the flow has at least accepted the trigger payload
                 {
                     const success = new FlowSuccess()
                     success.requestID = response.headers["x-ms-request-id"] as string

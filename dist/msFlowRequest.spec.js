@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chai_1 = require("chai");
 const MSFlowRequest = require("./msFlowRequest");
 const nock = require("nock");
+const nockProxy = require("nock-proxy");
 const validGetResponseBody = { "Data1": "Data1" };
 const validGetResponseHead = {
     "Content-Type": "application/json",
@@ -103,7 +104,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(validGetResponseHead)
             .get("/")
             .reply(200, validGetResponseBody);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "get");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "get" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         const flowResponse = await flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validGetResponseReturn.clientTrackingID);
@@ -130,7 +131,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(validPostyResponseHead)
             .post("/")
             .reply(200);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "post");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "post" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         const flowResponse = await flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
@@ -157,7 +158,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(validPostyResponseHead)
             .put("/")
             .reply(200);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "put");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "put" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         const flowResponse = await flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
@@ -184,7 +185,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(validPostyResponseHead)
             .patch("/")
             .reply(200);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "patch");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "patch" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         const flowResponse = await flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
@@ -211,7 +212,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(validPostyResponseHead)
             .delete("/")
             .reply(200);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "delete");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "delete" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         const flowResponse = await flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
@@ -238,7 +239,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(errorResponseHead)
             .get("/")
             .reply(400, errorResponseBody);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "get");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "get" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
@@ -254,7 +255,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(errorResponseHead)
             .post("/")
             .reply(400, errorResponseBody);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "post");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "post" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
@@ -270,7 +271,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(errorResponseHead)
             .put("/")
             .reply(400, errorResponseBody);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "put");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "put" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
@@ -286,7 +287,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(errorResponseHead)
             .patch("/")
             .reply(400, errorResponseBody);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "patch");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "patch" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
@@ -302,7 +303,7 @@ describe("Testing MSFlowRequest", () => {
             .defaultReplyHeaders(errorResponseHead)
             .delete("/")
             .reply(400, errorResponseBody);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com", "delete");
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "delete" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
@@ -317,7 +318,7 @@ describe("Testing MSFlowRequest", () => {
         nock("http://localTest.com")
             .defaultReplyHeaders(errorResponseHead)
             .delete("/").reply(200);
-        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest", "delete");
+        const requestOptions = { triggerURL: "http://localTest", triggerType: "delete" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
@@ -327,6 +328,18 @@ describe("Testing MSFlowRequest", () => {
             errorResponse = error;
         }
         chai_1.expect(errorResponse).to.deep.equal(errorResponseNotFoundReturn);
+    });
+    it("Expect flow to be called from behind a proxy", async () => {
+        const nockerProx = nockProxy(8001);
+        nock("http://localTest.com")
+            .defaultReplyHeaders(validPostyResponseHead)
+            .patch("/")
+            .reply(200);
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "patch", proxy: "http://localhost:8002" };
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
+        const flowResponse = await flowTrigger.trigger();
+        chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
+        nockerProx.close();
     });
 });
 //# sourceMappingURL=msFlowRequest.spec.js.map
