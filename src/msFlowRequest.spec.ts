@@ -384,4 +384,17 @@ describe("Testing MSFlowRequest",()=>{
         nockerProx.close()
     })
 
+    it("Expect raw data from sucessfull call", async ()=>{
+        nock("http://localTest.com")
+            .defaultReplyHeaders(validGetResponseHead)
+            .get("/")
+            .reply(200,validGetResponseBody)
+
+        const requestOptions = {triggerURL:"http://localTest.com",triggerType:"get"}
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions)
+        const flowResponse = await flowTrigger.trigger()
+        expect(flowResponse.rawHead).to.be.a("object")
+        expect(flowResponse.rawHead["x-ms-workflow-run-id"]).to.deep.equal("08586493682204313112626652749CU08")
+    })
+
 })

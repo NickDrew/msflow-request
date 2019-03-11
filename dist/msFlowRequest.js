@@ -7,9 +7,6 @@ exports.FlowSuccess = FlowSuccess;
 class FlowError {
 }
 exports.FlowError = FlowError;
-class FlowOptions {
-}
-exports.FlowOptions = FlowOptions;
 class FlowTrigger {
     constructor(options) {
         //TODO: Validate incoming data
@@ -81,6 +78,7 @@ class FlowTrigger {
                         success.remainingWorkflowULSize = Number.parseInt(response.headers["x-ms-ratelimit-remaining-workflow-upload-contentsize"]);
                     success.remainingAPIRequests = Number.parseInt(response.headers["x-ms-ratelimit-time-remaining-directapirequests"]);
                     success.data = body;
+                    success.rawHead = response.headers;
                     resolve(success);
                 }
             });

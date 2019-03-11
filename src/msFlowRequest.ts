@@ -27,6 +27,7 @@ export interface MSFlowSuccessResponse extends MSFlowResponse{
     remainingWorkflowULSize?: number;
     remainingAPIRequests: number;
     data?: object;
+    rawHead?: object;
 }
 
 export interface MSFlowRequestOptions{
@@ -57,6 +58,7 @@ export class FlowSuccess implements MSFlowSuccessResponse{
     public remainingWorkflowULSize?: number
     public remainingAPIRequests: number
     public data?: object
+    public rawHead?: object
 }
 
 export class FlowError implements MSFlowErrorResponse{
@@ -66,13 +68,7 @@ export class FlowError implements MSFlowErrorResponse{
     public error: string
     public message: string
 }
-export class FlowOptions implements MSFlowRequestOptions{
-    public triggerURL: string
-    public triggerType: string
-    public data?: object
-    public proxy?: string
-    public timeout?: number
-}
+
 export class FlowTrigger{
     private _triggerURL: string
     private _triggerType: string
@@ -149,6 +145,7 @@ export class FlowTrigger{
                     if(response.headers["x-ms-ratelimit-remaining-workflow-upload-contentsize"]) success.remainingWorkflowULSize = Number.parseInt(response.headers["x-ms-ratelimit-remaining-workflow-upload-contentsize"] as string)
                     success.remainingAPIRequests = Number.parseInt(response.headers["x-ms-ratelimit-time-remaining-directapirequests"] as string)
                     success.data = body
+                    success.rawHead = response.headers;
                     resolve(success)
                 }
 

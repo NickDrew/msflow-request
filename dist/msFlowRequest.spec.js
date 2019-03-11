@@ -361,5 +361,17 @@ describe("Testing MSFlowRequest", () => {
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
         nockerProx.close();
     });
+    it("Expect raw data from sucessfull call", async () => {
+        nock("http://localTest.com")
+            .defaultReplyHeaders(validGetResponseHead)
+            .get("/")
+            .reply(200, validGetResponseBody);
+        const requestOptions = { triggerURL: "http://localTest.com", triggerType: "get" };
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
+        const flowResponse = await flowTrigger.trigger();
+        chai_1.expect(flowResponse.rawHead).to.be.a("object");
+        chai_1.expect(flowResponse.rawHead["x-ms-workflow-run-id"]).to.deep.equal("08586493682204313112626652749CU08");
+        console.log(flowResponse.rawHead);
+    });
 });
 //# sourceMappingURL=msFlowRequest.spec.js.map
