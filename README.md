@@ -2,7 +2,7 @@
 Request wrapper to simplify calling Microsft Flow [Logic Apps](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-http-endpoint) HTTP requests triggers from node
 
 ```js
-const msFlowRequest = require('msflow-request')
+const msFlowRequest = require("msflow-request")
 
 const requestOptions = {
         triggerURL: "<url copied from flow>",
@@ -34,7 +34,7 @@ Installation is done using the
 [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```bash
-$ npm install ms-flow
+$ npm install msflow-request
 ```
 
 ## Features
