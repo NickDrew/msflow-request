@@ -4,6 +4,9 @@ const request = require("request");
 class FlowSuccess {
 }
 exports.FlowSuccess = FlowSuccess;
+class FlowError {
+}
+exports.FlowError = FlowError;
 class FlowOptions {
     constructor(triggerURL, triggerType, data) {
         this.triggerURL = triggerURL;
@@ -25,16 +28,35 @@ class FlowTrigger {
             method: this._triggerType,
             body: this._triggerData,
             json: true,
-            url: this._triggerURL
+            url: this._triggerURL,
+            timeout: 1000
         };
         return new Promise((resolve, reject) => {
             request(options, function (error, response, body) {
                 if (error) {
-                    reject(`response:${error.code} message:${error.code}`);
+                    const errorResponse = new FlowError();
+                    if (error.code) {
+                        errorResponse.statusCode = error.code,
+                            errorResponse.error = error.code,
+                            errorResponse.message = `A network error of type ${error.code} has occured.`;
+                    }
+                    else {
+                        errorResponse.statusCode = "Unknown",
+                            errorResponse.error = "Unknown",
+                            errorResponse.message = error.toString();
+                    }
+                    reject(errorResponse);
+                }
+                else if (body && body["error"]) //Flow enpoint recieved the paylod, but it was invalid
+                 {
+                    const errorResponse = new FlowError();
+                    errorResponse.statusCode = (response.statusCode) ? response.statusCode.toString() : "Unknown";
+                    errorResponse.error = body["error"];
+                    errorResponse.message = (body["message"]) ? body["message"] : "Unknown";
+                    reject(errorResponse);
                 }
                 else {
                     const success = new FlowSuccess();
-                    // public remainingWorkflowULSize?: number
                     success.requestID = response.headers["x-ms-request-id"];
                     success.requestDateTime = response.headers["date"];
                     success.workflowRunID = response.headers["x-ms-workflow-run-id"];

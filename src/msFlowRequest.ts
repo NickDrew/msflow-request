@@ -3,10 +3,11 @@ import * as request from "request"
 export interface MSFlowResponse{
     requestID: string;
     requestDateTime: string;
+    statusCode: string;
 }
 export interface MSFlowErrorResponse extends MSFlowResponse{
-    errorCode: string;
-    errorMessage: string;
+    error: string;
+    message: string;
 }
 
 export interface MSFlowSuccessResponse extends MSFlowResponse{
@@ -37,6 +38,7 @@ export interface MSFlowRequestOptions{
 export class FlowSuccess implements MSFlowSuccessResponse{
     public requestID: string
     public requestDateTime: string
+    public statusCode: string
     public workflowRunID: string
     public correlationID: string
     public clientTrackingID: string
@@ -53,6 +55,14 @@ export class FlowSuccess implements MSFlowSuccessResponse{
     public remainingWorkflowULSize?: number
     public remainingAPIRequests: number
     public data?: object
+}
+
+export class FlowError implements MSFlowErrorResponse{
+    public requestID: string
+    public requestDateTime: string
+    public statusCode: string
+    public error: string
+    public message: string
 }
 export class FlowOptions implements MSFlowRequestOptions{
     public constructor(triggerURL: string, triggerType: string, data?: object)
@@ -84,20 +94,42 @@ export class FlowTrigger{
             method: this._triggerType,
             body: this._triggerData,
             json: true,
-            url: this._triggerURL
+            url: this._triggerURL,
+            timeout: 1000
         }
         return new Promise<MSFlowSuccessResponse>((resolve,reject)=>{
             request(options, function (error, response, body) {
                 if(error)
                 {
-                    reject(`response:${error.code} message:${error.code}`)
+                    const errorResponse = new FlowError()
+                    if(error.code)
+                    {
+
+                        errorResponse.statusCode = error.code,
+                        errorResponse.error=error.code,
+                        errorResponse.message=`A network error of type ${error.code} has occured.`
+
+                    }
+                    else{
+                        errorResponse.statusCode = "Unknown",
+                        errorResponse.error="Unknown",
+                        errorResponse.message=error.toString()
+                    }
+
+                    reject(errorResponse)
+                }
+                else if(body && body["error"])//Flow enpoint recieved the paylod, but it was invalid
+                {
+                    const errorResponse = new FlowError()
+                    errorResponse.statusCode =(response.statusCode)? response.statusCode.toString() : "Unknown"
+                    errorResponse.error = body["error"]
+                    errorResponse.message = (body["message"])? body["message"]: "Unknown"
+
+                    reject(errorResponse)
                 }
                 else
                 {
                     const success = new FlowSuccess()
-
-                    // public remainingWorkflowULSize?: number
-
                     success.requestID = response.headers["x-ms-request-id"] as string
                     success.requestDateTime = response.headers["date"] as string
                     success.workflowRunID = response.headers["x-ms-workflow-run-id"] as string

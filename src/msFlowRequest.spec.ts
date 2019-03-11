@@ -83,6 +83,21 @@ const validPostyResponseReturn={
     remainingAPIRequests: 99999435,
     data: validPostyResponseBody
 }
+const errorResponseBody={
+    statusCode:"400",
+    error:"MissingApiVersionParameter",
+    message:"The api-version query parameter (?api-version=) is required for all requests."
+}
+const errorResponseHead={
+    "Content-Type":"application/json; charset=utf-8",
+    "x-ms-request-id":"uksouth:49c6a759-5b59-4e5c-ae7e-1b9beaa4a3a3",
+    "Date":"Mon, 11 Mar 2019 08:50:42 GMT"
+}
+const errorResponseNotFoundReturn={
+    statusCode:"ENOTFOUND",
+    error:"ENOTFOUND",
+    message:"A network error of type ENOTFOUND has occured."
+}
 
 describe("Testing MSFlowRequest",()=>{
     it("Expect a get operation to return valid data", async()=>{
@@ -234,6 +249,103 @@ describe("Testing MSFlowRequest",()=>{
         expect(flowResponse.workflowSystemID).to.deep.equal(validPostyResponseReturn.workflowSystemID)
         expect(flowResponse.workflowVersion).to.deep.equal(validPostyResponseReturn.workflowVersion)
 
+    })
+    it("Expect an invalid get response to result in an error",async ()=>{
+        nock("http://localTest.com")
+            .defaultReplyHeaders(errorResponseHead)
+            .get("/")
+            .reply(400,errorResponseBody)
+        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com","get")
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions)
+        let errorResponse = undefined
+        try{
+            await flowTrigger.trigger()
+        }
+        catch(error){
+            errorResponse = error
+        }
+        expect(errorResponse).to.deep.equal(errorResponseBody)
+    })
+    it("Expect an invalid post to return an error",async ()=>{
+        nock("http://localTest.com")
+            .defaultReplyHeaders(errorResponseHead)
+            .post("/")
+            .reply(400,errorResponseBody)
+        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com","post")
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions)
+        let errorResponse = undefined
+        try{
+            await flowTrigger.trigger()
+        }
+        catch(error){
+            errorResponse = error
+        }
+        expect(errorResponse).to.deep.equal(errorResponseBody)
+    })
+    it("Expect an invalid put response to result in an error",async ()=>{
+        nock("http://localTest.com")
+            .defaultReplyHeaders(errorResponseHead)
+            .put("/")
+            .reply(400,errorResponseBody)
+        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com","put")
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions)
+        let errorResponse = undefined
+        try{
+            await flowTrigger.trigger()
+        }
+        catch(error){
+            errorResponse = error
+        }
+        expect(errorResponse).to.deep.equal(errorResponseBody)
+    })
+    it("Expect an invalid patch response to result in an error",async ()=>{
+        nock("http://localTest.com")
+            .defaultReplyHeaders(errorResponseHead)
+            .patch("/")
+            .reply(400,errorResponseBody)
+        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com","patch")
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions)
+        let errorResponse = undefined
+        try{
+            await flowTrigger.trigger()
+        }
+        catch(error){
+            errorResponse = error
+        }
+        expect(errorResponse).to.deep.equal(errorResponseBody)
+    })
+    it("Expect an invalid delete response to result in an error",async ()=>{
+        nock("http://localTest.com")
+            .defaultReplyHeaders(errorResponseHead)
+            .delete("/")
+            .reply(400,errorResponseBody)
+        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest.com","delete")
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions)
+        let errorResponse = undefined
+        try{
+            await flowTrigger.trigger()
+        }
+        catch(error){
+            errorResponse = error
+        }
+        expect(errorResponse).to.deep.equal(errorResponseBody)
+    })
+
+    it("Expect invalid network address to result in an error", async ()=>{
+        nock("http://localTest.com")
+            .defaultReplyHeaders(errorResponseHead)
+            .delete("/").reply(200)
+
+        const requestOptions = new MSFlowRequest.FlowOptions("http://localTest","delete")
+        const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions)
+        let errorResponse = undefined
+        try{
+            await flowTrigger.trigger()
+        }
+        catch(error){
+            errorResponse = error
+        }
+        expect(errorResponse).to.deep.equal(errorResponseNotFoundReturn)
     })
 
 })
