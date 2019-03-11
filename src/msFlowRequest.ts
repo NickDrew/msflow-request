@@ -96,7 +96,6 @@ export class FlowTrigger{
                 {
                     const success = new FlowSuccess()
 
-                    // public remainingWorkflowWrites?: number
                     // public remainingWorkflowULSize?: number
 
                     success.requestID = response.headers["x-ms-request-id"] as string
@@ -111,10 +110,10 @@ export class FlowTrigger{
                     success.workflowName = response.headers["x-ms-workflow-name"] as string
                     success.workflowSystemID = response.headers["x-ms-workflow-system-id"] as string
                     success.trackingID = response.headers["x-ms-tracking-id"] as string
-                    success.requestID = response.headers["x-ms-request-id"] as string
+                    if(response.headers["x-ms-ratelimit-burst-remaining-workflow-writes"]) success.remainingWorkflowWrites = Number.parseInt(response.headers["x-ms-ratelimit-burst-remaining-workflow-writes"] as string)
                     if(response.headers["x-ms-ratelimit-burst-remaining-workflow-reads"]) success.remainingWorkflowReads = Number.parseInt(response.headers["x-ms-ratelimit-burst-remaining-workflow-reads"] as string)
                     if(response.headers["x-ms-ratelimit-remaining-workflow-download-contentsize"]) success.remainingWorkflowDLSize = Number.parseInt(response.headers["x-ms-ratelimit-remaining-workflow-download-contentsize"] as string)
-                    success.requestID = response.headers["x-ms-request-id"] as string
+                    if(response.headers["x-ms-ratelimit-remaining-workflow-upload-contentsize"]) success.remainingWorkflowULSize = Number.parseInt(response.headers["x-ms-ratelimit-remaining-workflow-upload-contentsize"] as string)
                     success.remainingAPIRequests = Number.parseInt(response.headers["x-ms-ratelimit-time-remaining-directapirequests"] as string)
                     success.data = body
                     resolve(success)

@@ -34,8 +34,6 @@ class FlowTrigger {
                 }
                 else {
                     const success = new FlowSuccess();
-                    // public remainingWorkflowWrites?: number
-                    // public remainingWorkflowReads?: number
                     // public remainingWorkflowULSize?: number
                     success.requestID = response.headers["x-ms-request-id"];
                     success.requestDateTime = response.headers["date"];
@@ -49,15 +47,16 @@ class FlowTrigger {
                     success.workflowName = response.headers["x-ms-workflow-name"];
                     success.workflowSystemID = response.headers["x-ms-workflow-system-id"];
                     success.trackingID = response.headers["x-ms-tracking-id"];
-                    success.requestID = response.headers["x-ms-request-id"];
+                    if (response.headers["x-ms-ratelimit-burst-remaining-workflow-writes"])
+                        success.remainingWorkflowWrites = Number.parseInt(response.headers["x-ms-ratelimit-burst-remaining-workflow-writes"]);
                     if (response.headers["x-ms-ratelimit-burst-remaining-workflow-reads"])
                         success.remainingWorkflowReads = Number.parseInt(response.headers["x-ms-ratelimit-burst-remaining-workflow-reads"]);
                     if (response.headers["x-ms-ratelimit-remaining-workflow-download-contentsize"])
                         success.remainingWorkflowDLSize = Number.parseInt(response.headers["x-ms-ratelimit-remaining-workflow-download-contentsize"]);
-                    success.requestID = response.headers["x-ms-request-id"];
+                    if (response.headers["x-ms-ratelimit-remaining-workflow-upload-contentsize"])
+                        success.remainingWorkflowULSize = Number.parseInt(response.headers["x-ms-ratelimit-remaining-workflow-upload-contentsize"]);
                     success.remainingAPIRequests = Number.parseInt(response.headers["x-ms-ratelimit-time-remaining-directapirequests"]);
                     success.data = body;
-                    console.log(success);
                     resolve(success);
                 }
             });
