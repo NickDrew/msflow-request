@@ -2,7 +2,7 @@
   "name": "msflow-request",
   "version": "1.0.0",
   "description": "node.js module for accessing microsoft flow's http request trigger",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "mocha dist/**/*.spec.js -r esm",
     "lint": "eslint src/**/**.ts --max-warnings=0",
