@@ -1,6 +1,6 @@
 {
   "name": "msflow-request",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Request wrapper to simplify calling Microsft Flow logic app HTTP request triggers",
   "main": "dist/msFlowRequest.js",
   "scripts": {

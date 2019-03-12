@@ -120,7 +120,7 @@ export class FlowTrigger{
                 {
                     const errorResponse = new FlowError()
                     errorResponse.statusCode =(response.statusCode)? response.statusCode.toString() : "Unknown"
-                    errorResponse.error = body["error"]
+                    errorResponse.error = (body["error"]["code"])? body["error"]["code"]:body["error"]
                     errorResponse.message = (body["message"])? body["message"]: "Unknown"
                     reject(errorResponse)
                 }
