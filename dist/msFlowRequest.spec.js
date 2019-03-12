@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const chai_1 = require("chai");
 const MSFlowRequest = require("./msFlowRequest");
@@ -104,14 +112,14 @@ const errorTimeoutReturn = {
     message: "A network error of type ESOCKETTIMEDOUT has occured."
 };
 describe("Testing MSFlowRequest", () => {
-    it("Expect a get operation to return valid data", async () => {
+    it("Expect a get operation to return valid data", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(validGetResponseHead)
             .get("/")
             .reply(200, validGetResponseBody);
         const requestOptions = { triggerURL: "http://localTest.com", triggerType: "get" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
-        const flowResponse = await flowTrigger.trigger();
+        const flowResponse = yield flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validGetResponseReturn.clientTrackingID);
         chai_1.expect(flowResponse.correlationID).to.deep.equal(validGetResponseReturn.correlationID);
         chai_1.expect(flowResponse.data).to.deep.equal(validGetResponseReturn.data);
@@ -130,15 +138,15 @@ describe("Testing MSFlowRequest", () => {
         chai_1.expect(flowResponse.workflowRunID).to.deep.equal(validGetResponseReturn.workflowRunID);
         chai_1.expect(flowResponse.workflowSystemID).to.deep.equal(validGetResponseReturn.workflowSystemID);
         chai_1.expect(flowResponse.workflowVersion).to.deep.equal(validGetResponseReturn.workflowVersion);
-    });
-    it("Expect a post to send valid data", async () => {
+    }));
+    it("Expect a post to send valid data", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(validPostyResponseHead)
             .post("/")
             .reply(200);
         const requestOptions = { triggerURL: "http://localTest.com", triggerType: "post" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
-        const flowResponse = await flowTrigger.trigger();
+        const flowResponse = yield flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
         chai_1.expect(flowResponse.correlationID).to.deep.equal(validPostyResponseReturn.correlationID);
         chai_1.expect(flowResponse.data).to.deep.equal(validPostyResponseReturn.data);
@@ -157,15 +165,15 @@ describe("Testing MSFlowRequest", () => {
         chai_1.expect(flowResponse.workflowRunID).to.deep.equal(validPostyResponseReturn.workflowRunID);
         chai_1.expect(flowResponse.workflowSystemID).to.deep.equal(validPostyResponseReturn.workflowSystemID);
         chai_1.expect(flowResponse.workflowVersion).to.deep.equal(validPostyResponseReturn.workflowVersion);
-    });
-    it("Expect a put to send valid data", async () => {
+    }));
+    it("Expect a put to send valid data", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(validPostyResponseHead)
             .put("/")
             .reply(200);
         const requestOptions = { triggerURL: "http://localTest.com", triggerType: "put" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
-        const flowResponse = await flowTrigger.trigger();
+        const flowResponse = yield flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
         chai_1.expect(flowResponse.correlationID).to.deep.equal(validPostyResponseReturn.correlationID);
         chai_1.expect(flowResponse.data).to.deep.equal(validPostyResponseReturn.data);
@@ -184,15 +192,15 @@ describe("Testing MSFlowRequest", () => {
         chai_1.expect(flowResponse.workflowRunID).to.deep.equal(validPostyResponseReturn.workflowRunID);
         chai_1.expect(flowResponse.workflowSystemID).to.deep.equal(validPostyResponseReturn.workflowSystemID);
         chai_1.expect(flowResponse.workflowVersion).to.deep.equal(validPostyResponseReturn.workflowVersion);
-    });
-    it("Expect a patch to send valid data", async () => {
+    }));
+    it("Expect a patch to send valid data", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(validPostyResponseHead)
             .patch("/")
             .reply(200);
         const requestOptions = { triggerURL: "http://localTest.com", triggerType: "patch" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
-        const flowResponse = await flowTrigger.trigger();
+        const flowResponse = yield flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
         chai_1.expect(flowResponse.correlationID).to.deep.equal(validPostyResponseReturn.correlationID);
         chai_1.expect(flowResponse.data).to.deep.equal(validPostyResponseReturn.data);
@@ -211,15 +219,15 @@ describe("Testing MSFlowRequest", () => {
         chai_1.expect(flowResponse.workflowRunID).to.deep.equal(validPostyResponseReturn.workflowRunID);
         chai_1.expect(flowResponse.workflowSystemID).to.deep.equal(validPostyResponseReturn.workflowSystemID);
         chai_1.expect(flowResponse.workflowVersion).to.deep.equal(validPostyResponseReturn.workflowVersion);
-    });
-    it("Expect a delete to send valid command", async () => {
+    }));
+    it("Expect a delete to send valid command", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(validPostyResponseHead)
             .delete("/")
             .reply(200);
         const requestOptions = { triggerURL: "http://localTest.com", triggerType: "delete" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
-        const flowResponse = await flowTrigger.trigger();
+        const flowResponse = yield flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
         chai_1.expect(flowResponse.correlationID).to.deep.equal(validPostyResponseReturn.correlationID);
         chai_1.expect(flowResponse.data).to.deep.equal(validPostyResponseReturn.data);
@@ -238,8 +246,8 @@ describe("Testing MSFlowRequest", () => {
         chai_1.expect(flowResponse.workflowRunID).to.deep.equal(validPostyResponseReturn.workflowRunID);
         chai_1.expect(flowResponse.workflowSystemID).to.deep.equal(validPostyResponseReturn.workflowSystemID);
         chai_1.expect(flowResponse.workflowVersion).to.deep.equal(validPostyResponseReturn.workflowVersion);
-    });
-    it("Expect an invalid get response to result in an error", async () => {
+    }));
+    it("Expect an invalid get response to result in an error", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(errorResponseHead)
             .get("/")
@@ -248,14 +256,14 @@ describe("Testing MSFlowRequest", () => {
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
-            await flowTrigger.trigger();
+            yield flowTrigger.trigger();
         }
         catch (error) {
             errorResponse = error;
         }
         chai_1.expect(errorResponse).to.deep.equal(errorResponseBody);
-    });
-    it("Expect an invalid post to return an error", async () => {
+    }));
+    it("Expect an invalid post to return an error", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(errorResponseHead)
             .post("/")
@@ -264,14 +272,14 @@ describe("Testing MSFlowRequest", () => {
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
-            await flowTrigger.trigger();
+            yield flowTrigger.trigger();
         }
         catch (error) {
             errorResponse = error;
         }
         chai_1.expect(errorResponse).to.deep.equal(errorResponseBody);
-    });
-    it("Expect an invalid put response to result in an error", async () => {
+    }));
+    it("Expect an invalid put response to result in an error", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(errorResponseHead)
             .put("/")
@@ -280,14 +288,14 @@ describe("Testing MSFlowRequest", () => {
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
-            await flowTrigger.trigger();
+            yield flowTrigger.trigger();
         }
         catch (error) {
             errorResponse = error;
         }
         chai_1.expect(errorResponse).to.deep.equal(errorResponseBody);
-    });
-    it("Expect an invalid patch response to result in an error", async () => {
+    }));
+    it("Expect an invalid patch response to result in an error", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(errorResponseHead)
             .patch("/")
@@ -296,14 +304,14 @@ describe("Testing MSFlowRequest", () => {
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
-            await flowTrigger.trigger();
+            yield flowTrigger.trigger();
         }
         catch (error) {
             errorResponse = error;
         }
         chai_1.expect(errorResponse).to.deep.equal(errorResponseBody);
-    });
-    it("Expect an invalid delete response to result in an error", async () => {
+    }));
+    it("Expect an invalid delete response to result in an error", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(errorResponseHead)
             .delete("/")
@@ -312,14 +320,14 @@ describe("Testing MSFlowRequest", () => {
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
-            await flowTrigger.trigger();
+            yield flowTrigger.trigger();
         }
         catch (error) {
             errorResponse = error;
         }
         chai_1.expect(errorResponse).to.deep.equal(errorResponseBody);
-    });
-    it("Expect invalid network address to result in an error", async () => {
+    }));
+    it("Expect invalid network address to result in an error", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(errorResponseHead)
             .delete("/").reply(200);
@@ -327,14 +335,14 @@ describe("Testing MSFlowRequest", () => {
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
-            await flowTrigger.trigger();
+            yield flowTrigger.trigger();
         }
         catch (error) {
             errorResponse = error;
         }
         chai_1.expect(errorResponse).to.deep.equal(errorResponseNotFoundReturn);
-    });
-    it("Expect timeout to result in an error", async () => {
+    }));
+    it("Expect timeout to result in an error", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(errorResponseHead)
             .get("/").delayConnection(600).reply(200);
@@ -342,14 +350,14 @@ describe("Testing MSFlowRequest", () => {
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
         let errorResponse = undefined;
         try {
-            await flowTrigger.trigger();
+            yield flowTrigger.trigger();
         }
         catch (error) {
             errorResponse = error;
         }
         chai_1.expect(errorResponse).to.deep.equal(errorTimeoutReturn);
-    });
-    it("Expect flow to be called from behind a proxy", async () => {
+    }));
+    it("Expect flow to be called from behind a proxy", () => __awaiter(this, void 0, void 0, function* () {
         const nockerProx = nockProxy(8001);
         nock("http://localTest.com")
             .defaultReplyHeaders(validPostyResponseHead)
@@ -357,21 +365,20 @@ describe("Testing MSFlowRequest", () => {
             .reply(200);
         const requestOptions = { triggerURL: "http://localTest.com", triggerType: "patch", proxy: "http://localhost:8001" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
-        const flowResponse = await flowTrigger.trigger();
+        const flowResponse = yield flowTrigger.trigger();
         chai_1.expect(flowResponse.clientTrackingID).to.deep.equal(validPostyResponseReturn.clientTrackingID);
         nockerProx.close();
-    });
-    it("Expect raw data from sucessfull call", async () => {
+    }));
+    it("Expect raw data from sucessfull call", () => __awaiter(this, void 0, void 0, function* () {
         nock("http://localTest.com")
             .defaultReplyHeaders(validGetResponseHead)
             .get("/")
             .reply(200, validGetResponseBody);
         const requestOptions = { triggerURL: "http://localTest.com", triggerType: "get" };
         const flowTrigger = new MSFlowRequest.FlowTrigger(requestOptions);
-        const flowResponse = await flowTrigger.trigger();
+        const flowResponse = yield flowTrigger.trigger();
         chai_1.expect(flowResponse.rawHead).to.be.a("object");
         chai_1.expect(flowResponse.rawHead["x-ms-workflow-run-id"]).to.deep.equal("08586493682204313112626652749CU08");
-        console.log(flowResponse.rawHead);
-    });
+    }));
 });
 //# sourceMappingURL=msFlowRequest.spec.js.map
