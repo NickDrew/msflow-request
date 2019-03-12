@@ -1,5 +1,5 @@
 # msflow-request
-Request wrapper to simplify calling Microsft Flow [Logic App](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-http-endpoint) HTTP request triggers from node
+Request wrapper to simplify calling Microsft Flow [Logic App HTTP request](https://docs.microsoft.com/en-us/azure/connectors/connectors-native-reqres)  triggers from node
 
 ```js
 const msFlowRequest = require("msflow-request")
