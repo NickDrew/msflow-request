@@ -1,6 +1,6 @@
 {
   "name": "msflow-request",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Request wrapper to simplify calling Microsft Flow logic app HTTP request triggers",
   "main": "dist/msFlowRequest.js",
   "scripts": {
@@ -17,8 +17,11 @@
   "keywords": [
     "nodejs",
     "microsoft-flow",
+    "microsoft flow",
     "logic-apps",
-    "nodejs-modules"
+    "logic apps",
+    "nodejs-modules",
+    "nodejs modules"
   ],
   "author": "Nicholas Drew",
   "license": "MIT",
